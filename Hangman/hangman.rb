@@ -10,7 +10,7 @@ end
 
 def play 
 selectWordFrom @file
-
+turn
 end
 
 
@@ -25,6 +25,59 @@ puts @word
 @word.length.times {@bank.push '_'}
 puts @bank.join(' ')
 
+end
+
+
+def turn
+while true
+puts "Word: #{@bank}"
+puts "Guesses: #{@guesses}"
+puts "Misses: #{@misses}"
+break if isGuessed? or gameOver?
+
+puts "select a letter:"
+
+c = gets.strip.upcase
+until legitLetter? c
+puts 'ERROR!'
+puts "select a letter:"
+c = gets.strip.upcase
+end
+puts "You chose - #{c}"
+check c
+puts '________________________________________________________________________________________'
+puts '________________________________________________________________________________________'
+puts '________________________________________________________________________________________'
+
+end
+puts 'game over'
+end
+
+
+
+def check c
+if @word.include? c
+ index = []
+ @word.split('').each_with_index {|x,i| index.push i if x==c}
+ index.each {|x| @bank[x] = c}   
+# index = @word.index c
+# @bank[index] = c
+
+else
+    if @misses.include? c
+        puts 'try again'
+    else
+        @misses.push c
+        @guesses -= 1
+    end
+        
+end
+end
+
+
+def legitLetter? c
+return true if c.length == 1 and c.match?(/[a-zA-Z]/)
+return false
 end
 
 def isGuessed?
